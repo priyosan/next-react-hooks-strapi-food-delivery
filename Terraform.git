@@ -1,0 +1,89 @@
+Root Level Files:
+
+variables.tf:
+
+hcl
+Copy code
+variable "aws_region" {
+  description = "AWS Region"
+  default     = "us-east-1"  # Change to your preferred AWS region
+}
+main.tf:
+
+hcl
+Copy code
+provider "aws" {
+  region = var.aws_region
+}
+
+module "backend" {
+  source = "./backend"
+}
+
+module "frontend" {
+  source = "./frontend"
+}
+outputs.tf:
+
+hcl
+Copy code
+output "backend_url" {
+  value = module.backend.backend_url
+}
+
+output "frontend_url" {
+  value = module.frontend.frontend_url
+}
+Backend Deployment with Elastic Beanstalk
+backend/main.tf:
+hcl
+Copy code
+provider "aws" {
+  region = var.aws_region
+}
+
+resource "aws_elastic_beanstalk_application" "backend" {
+  name = "food-ordering-backend"
+}
+
+resource "aws_elastic_beanstalk_environment" "backend" {
+  name                = "food-ordering-backend-env"
+  application         = aws_elastic_beanstalk_application.backend.name
+  solution_stack_name = "64bit Amazon Linux 2 v5.4.5 running Node.js 14"
+}
+
+output "backend_url" {
+  value = aws_elastic_beanstalk_environment.backend.endpoint_url
+}
+Frontend Deployment with S3
+frontend/main.tf:
+hcl
+Copy code
+provider "aws" {
+  region = var.aws_region
+}
+
+resource "aws_s3_bucket" "frontend" {
+  bucket = "food-ordering-frontend-bucket"  # Replace with a unique S3 bucket name
+  acl    = "public-read"
+
+  website {
+    index_document = "index.html"
+    error_document = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_object" "frontend" {
+  bucket = aws_s3_bucket.frontend.bucket
+  key    = "index.html"
+  acl    = "public-read"
+  source = "path/to/your/build/index.html"  # Replace with the actual build path
+
+  # Add more resources such as CSS, JS files, etc.
+}
+
+output "frontend_url" {
+  value = aws_s3_bucket.frontend.website_endpoint
+}
+Usage
+Run terraform init, terraform plan, and terraform apply in the root directory to deploy both the frontend and backend.
