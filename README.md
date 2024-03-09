@@ -1,5 +1,5 @@
 
-##Create a Food Ordering App with Strapi and Next.js 1/7
+##Create a Food Ordering App with Strapi and Next.js 1/7##
 #Learn how to create a food ordering app with Strapi and Next.js using React Hooks.
 Strapi
 Strapi
@@ -23,7 +23,7 @@ Jun 29, 2023
 
 
 
-##Tutorial updated by Fredrick Emmanuel and Paul Bratslavsky
+##Tutorial updated by Fredrick Emmanuel and Paul Bratslavsky##
 
 This tutorial will walk you through how to use Next.js to power your UI, complete using GraphQL, Stripe, Strapi, and Next to developing a full-stack application complete with the powerful Strapi (Headless CMS) powering the backend.
 
